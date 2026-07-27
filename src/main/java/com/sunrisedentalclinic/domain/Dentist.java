@@ -24,5 +24,5 @@ public class Dentist extends Staff {
     public BigDecimal getConsultationFee() { return consultationFee; }
     public void setConsultationFee(BigDecimal consultationFee) { this.consultationFee = consultationFee; }
 
-    // getSchedule(date) later
+    // getSchedule(date) later in service layer
 }

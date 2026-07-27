@@ -23,5 +23,5 @@ public class Patient extends Person {
     public LocalDate getRegisteredDate() { return registeredDate; }
     public void setRegisteredDate(LocalDate registeredDate) { this.registeredDate = registeredDate; }
 
-    // create GetAppointmentHistory later
+    // create GetAppointmentHistory later in service layer
 }
