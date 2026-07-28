@@ -9,6 +9,7 @@ public class Bill {
     private final BigDecimal treatmentCost;
     private BigDecimal totalAmount;
     private final LocalDateTime generatedDate;
+    private String appointmentNo;
 
     public Bill(String billID, BigDecimal consultationFee, BigDecimal treatmentCost) {
         this.billID = billID;
@@ -34,4 +35,6 @@ public class Bill {
     public BigDecimal getTreatmentCost() { return treatmentCost; }
     public BigDecimal getTotalAmount() { return totalAmount; }
     public LocalDateTime getGeneratedDate() { return generatedDate; }
+    public String getAppointmentNo() { return appointmentNo; }
+    public void setAppointmentNo(String appointmentNo) { this.appointmentNo = appointmentNo; }
 }
