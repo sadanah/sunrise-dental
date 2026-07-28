@@ -13,7 +13,12 @@ class AppointmentDAOTest {
     @BeforeEach
     void setUp() {
         appointmentDAO = new AppointmentDAO();
-        // sunrise_dental_test schema exists with seed data for known dentist/patient/treatment
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Remove anything this test class may have inserted, so each run starts clean
+        appointmentDAO.delete("APT-TEST-01");
     }
 
     @Test
