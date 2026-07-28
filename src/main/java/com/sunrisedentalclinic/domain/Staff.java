@@ -20,8 +20,8 @@ public abstract class Staff extends Person {
         return getRole() + ": " + name + " (Staff ID: " + staffID + ")";
     }
 
-    public String getstaffID() { return staffID; }
-    public void setstaffID(String staffID) { this.staffID = staffID; }
+    public String getStaffID() { return staffID; }
+    public void setStaffID(String staffID) { this.staffID = staffID; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getPasswordHash() { return passwordHash; }
