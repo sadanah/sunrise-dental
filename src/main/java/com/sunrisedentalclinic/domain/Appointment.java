@@ -8,6 +8,10 @@ public class Appointment {
     private final LocalDate appointmentDate;
     private final LocalTime appointmentTime;
     private AppointmentStatus status;
+    private String patientID;
+    private String dentistID;
+    private String treatmentID;
+    private String staffID; // who registered it
 
     public Appointment(String appointmentNo, LocalDate appointmentDate, LocalTime appointmentTime) {
         this.appointmentNo = appointmentNo;
@@ -33,4 +37,18 @@ public class Appointment {
     public LocalDate getAppointmentDate() { return appointmentDate; }
     public LocalTime getAppointmentTime() { return appointmentTime; }
     public AppointmentStatus getStatus() { return status; }
+    public String getPatientID() { return patientID; }
+    public void setPatientID(String patientID) { this.patientID = patientID; }
+    public String getDentistID() { return dentistID; }
+    public void setDentistID(String dentistID) { this.dentistID = dentistID; }
+    public String getTreatmentID() { return treatmentID; }
+    public void setTreatmentID(String treatmentID) { this.treatmentID = treatmentID; }
+    public String getStaffID() { return staffID; }
+    public void setStaffID(String staffID) { this.staffID = staffID; }
+
+    // Used only by the DAO layer to reconstruct status from the DB without
+    // re-triggering the transition guard logic in updateStatus()
+    public void updateStatusFromDB(AppointmentStatus status) {
+        this.status = status;
+    }
 }
