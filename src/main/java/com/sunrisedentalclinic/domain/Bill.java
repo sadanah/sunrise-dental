@@ -30,6 +30,10 @@ public class Bill {
                 billID, consultationFee, treatmentCost, totalAmount);
     }
 
+    public void overrideTotalAmount(BigDecimal amount) {
+        this.totalAmount = amount;
+    }
+
     public String getBillID() { return billID; }
     public BigDecimal getConsultationFee() { return consultationFee; }
     public BigDecimal getTreatmentCost() { return treatmentCost; }
