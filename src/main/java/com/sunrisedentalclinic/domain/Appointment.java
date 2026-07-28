@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Appointment {
-    private final String appointmentNo;
+    private String appointmentNo;
     private final LocalDate appointmentDate;
     private final LocalTime appointmentTime;
     private AppointmentStatus status;
@@ -34,6 +34,8 @@ public class Appointment {
     }
 
     public String getAppointmentNo() { return appointmentNo; }
+    //setter for appointmentNo
+    public void setAppointmentNo(String apt001) {this.appointmentNo = appointmentNo; }
     public LocalDate getAppointmentDate() { return appointmentDate; }
     public LocalTime getAppointmentTime() { return appointmentTime; }
     public AppointmentStatus getStatus() { return status; }
