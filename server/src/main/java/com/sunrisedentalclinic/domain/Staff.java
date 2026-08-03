@@ -1,5 +1,7 @@
 package com.sunrisedentalclinic.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class Staff extends Person {
     private String staffID;
     private String username;
@@ -24,6 +26,8 @@ public abstract class Staff extends Person {
     public void setStaffID(String staffID) { this.staffID = staffID; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
+    @JsonIgnore
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
