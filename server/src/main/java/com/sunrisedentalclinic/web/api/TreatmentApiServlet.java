@@ -17,7 +17,10 @@ public class TreatmentApiServlet extends HttpServlet {
     public TreatmentApiServlet(IAdminService a, TreatmentTypeDAO d) { adminService = a; treatmentTypeDAO = d; }
 
     @Override protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        if (!ApiSessionUtil.hasRole(req, "ADMIN")) { JsonUtil.writeJson(res, 403, new ApiError("Forbidden")); return; }
+        if (!ApiSessionUtil.hasRole(req, "ADMIN") && !ApiSessionUtil.hasRole(req, "RECEPTIONIST")) {
+            JsonUtil.writeJson(res, 403, new ApiError("Forbidden"));
+            return;
+        }
         JsonUtil.writeJson(res, 200, treatmentTypeDAO.findAll());
     }
 
