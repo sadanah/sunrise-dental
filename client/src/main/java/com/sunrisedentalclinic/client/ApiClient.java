@@ -3,7 +3,7 @@ package com.sunrisedentalclinic.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sunrisedentalclinic.client.dto.*;
-
+import com.sunrisedentalclinic.client.dto.DentistDto;
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -160,5 +160,9 @@ public class ApiClient {
 
     public ApiResponse<Void> logout() throws Exception {
         return post("/api/logout", Map.of(), Void.class);
+    }
+
+    public ApiResponse<DentistDto[]> getDentists() throws Exception {
+        return get("/api/dentists", DentistDto[].class);
     }
 }
