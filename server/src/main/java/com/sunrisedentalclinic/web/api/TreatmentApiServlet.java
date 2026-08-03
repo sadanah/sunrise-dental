@@ -1,4 +1,6 @@
 package com.sunrisedentalclinic.web.api;
+
+import com.sunrisedentalclinic.web.api.ServiceFactoryApi;
 import com.sunrisedentalclinic.dao.TreatmentTypeDAO;
 import com.sunrisedentalclinic.domain.TreatmentType;
 import com.sunrisedentalclinic.service.IAdminService;

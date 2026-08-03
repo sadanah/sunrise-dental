@@ -1,4 +1,5 @@
 package com.sunrisedentalclinic.web.api;
+import com.sunrisedentalclinic.web.api.ServiceFactoryApi;
 import com.sunrisedentalclinic.dao.PatientDAO;
 import com.sunrisedentalclinic.domain.Patient;
 import com.sunrisedentalclinic.web.ApiSessionUtil;
