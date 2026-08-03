@@ -12,6 +12,7 @@ public class PatientPanel extends JPanel {
 
     // Register tab fields
     private final JTextField nameField = new JTextField(20);
+    private final JTextField idField = new JTextField(20);
     private final JTextField contactField = new JTextField(20);
     private final JTextField addressField = new JTextField(20);
     private final JLabel registerStatus = new JLabel(" ");
@@ -40,6 +41,8 @@ public class PatientPanel extends JPanel {
         JPanel form = new JPanel(new GridLayout(0, 2, 8, 8));
         form.add(new JLabel("Name:"));
         form.add(nameField);
+        form.add(new JLabel("Patient ID:"));
+        form.add(idField);
         form.add(new JLabel("Contact No:"));
         form.add(contactField);
         form.add(new JLabel("Address:"));
@@ -80,10 +83,11 @@ public class PatientPanel extends JPanel {
 
     private void registerPatient() {
         String name = nameField.getText().trim();
+        String id = idField.getText().trim();
         String contact = contactField.getText().trim();
         String address = addressField.getText().trim();
 
-        if (name.isEmpty() || contact.isEmpty() || address.isEmpty()) {
+        if (name.isEmpty() || id.isEmpty() || contact.isEmpty() || address.isEmpty()) {
             registerStatus.setForeground(Color.RED);
             registerStatus.setText("All fields are required.");
             return;
@@ -101,7 +105,7 @@ public class PatientPanel extends JPanel {
             protected Void doInBackground() {
                 try {
                     // ASSUMPTION: action="REGISTER" and empty patientID for a new patient — confirm against your servlet.
-                    ApiClient.ApiResponse<Void> resp = apiClient.savePatient("REGISTER", "", name, contact, address);
+                    ApiClient.ApiResponse<Void> resp = apiClient.savePatient("REGISTER", id, name, contact, address);
                     statusCode = resp.statusCode;
                     errorMessage = resp.errorMessage;
                 } catch (Exception ex) {
@@ -118,6 +122,7 @@ public class PatientPanel extends JPanel {
                     registerStatus.setForeground(new Color(0, 128, 0));
                     registerStatus.setText("Patient registered.");
                     nameField.setText("");
+                    idField.setText("");
                     contactField.setText("");
                     addressField.setText("");
                 } else {
