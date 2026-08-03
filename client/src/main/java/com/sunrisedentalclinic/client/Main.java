@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
+        ApiClient apiClient = new ApiClient();
+        SwingUtilities.invokeLater(() -> new LoginFrame(apiClient).setVisible(true));
     }
 }
