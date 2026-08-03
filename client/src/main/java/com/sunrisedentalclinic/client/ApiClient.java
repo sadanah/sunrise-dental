@@ -1,5 +1,6 @@
 package com.sunrisedentalclinic.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sunrisedentalclinic.client.dto.*;
@@ -21,7 +22,9 @@ public class ApiClient {
         this.httpClient = HttpClient.newBuilder()
                 .cookieHandler(new CookieManager())
                 .build();
-        this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        this.mapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public static class ApiResponse<T> {
