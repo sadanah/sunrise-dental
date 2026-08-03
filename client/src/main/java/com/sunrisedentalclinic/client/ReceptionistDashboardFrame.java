@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class ReceptionistDashboardFrame extends JFrame {
 
-    private final ApiClient apiClient = new ApiClient();
+    private final ApiClient apiClient;
 
-    public ReceptionistDashboardFrame() {
+    public ReceptionistDashboardFrame(ApiClient apiClient) {
         super("Receptionist Dashboard");
+        this.apiClient = apiClient;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 350);
         setLocationRelativeTo(null);
@@ -20,8 +21,12 @@ public class ReceptionistDashboardFrame extends JFrame {
         welcome.setFont(welcome.getFont().deriveFont(Font.BOLD, 15f));
         panel.add(welcome, BorderLayout.NORTH);
 
-        JLabel placeholder = new JLabel("Appointment / Patient / Billing workflows coming soon.", SwingConstants.CENTER);
-        panel.add(placeholder, BorderLayout.CENTER);
+        JPanel actions = new JPanel(new GridLayout(0, 1, 8, 8));
+        JButton registerAppointmentButton = new JButton("Register Appointment");
+        registerAppointmentButton.addActionListener(e ->
+                new RegisterAppointmentDialog(this, apiClient).setVisible(true));
+        actions.add(registerAppointmentButton);
+        panel.add(actions, BorderLayout.CENTER);
 
         JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(e -> logout());
@@ -36,11 +41,10 @@ public class ReceptionistDashboardFrame extends JFrame {
         try {
             apiClient.logout();
         } catch (Exception ex) {
-            // Server unreachable or session already gone - not fatal, still log out locally
             System.out.println("[WARN] Logout call failed: " + ex.getMessage());
         }
         AppSession.clear();
         dispose();
-        new LoginFrame().setVisible(true);
+        new LoginFrame(apiClient).setVisible(true);
     }
 }

@@ -10,10 +10,11 @@ public class LoginFrame extends JFrame {
     private final JTextField usernameField = new JTextField(18);
     private final JPasswordField passwordField = new JPasswordField(18);
     private final JLabel errorLabel = new JLabel(" ");
-    private final ApiClient apiClient = new ApiClient();
+    private final ApiClient apiClient;
 
-    public LoginFrame() {
+    public LoginFrame(ApiClient apiClient) {
         super("Sunrise Dental Clinic — Login");
+        this.apiClient = apiClient;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(380, 260);
         setLocationRelativeTo(null);
@@ -85,13 +86,13 @@ public class LoginFrame extends JFrame {
         JFrame dashboard;
         switch (role) {
             case "ADMIN":
-                dashboard = new AdminDashboardFrame();
+                dashboard = new AdminDashboardFrame(apiClient);
                 break;
             case "DENTIST":
-                dashboard = new DentistDashboardFrame();
+                dashboard = new DentistDashboardFrame(apiClient);
                 break;
             default:
-                dashboard = new ReceptionistDashboardFrame();
+                dashboard = new ReceptionistDashboardFrame(apiClient);
                 break;
         }
         dashboard.setVisible(true);

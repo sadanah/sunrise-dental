@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class DentistDashboardFrame extends JFrame {
 
-    private final ApiClient apiClient = new ApiClient();
+    private final ApiClient apiClient;
 
-    public DentistDashboardFrame() {
-        super("Dentist Dashboard");
+    public DentistDashboardFrame(ApiClient apiClient) {
+        super("Admin Dashboard");
+        this.apiClient = apiClient;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 350);
         setLocationRelativeTo(null);
@@ -36,11 +37,10 @@ public class DentistDashboardFrame extends JFrame {
         try {
             apiClient.logout();
         } catch (Exception ex) {
-            // Server unreachable or session already gone - not fatal, still log out locally
             System.out.println("[WARN] Logout call failed: " + ex.getMessage());
         }
         AppSession.clear();
         dispose();
-        new LoginFrame().setVisible(true);
+        new LoginFrame(apiClient).setVisible(true);
     }
 }
