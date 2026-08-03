@@ -1,14 +1,18 @@
-package com.sunrisedentalclinic.client;
+package com.sunrisedentalclinic.client.ui.dashboard;
+
+import com.sunrisedentalclinic.client.ApiClient;
+import com.sunrisedentalclinic.client.AppSession;
+import com.sunrisedentalclinic.client.ui.LoginFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ReceptionistDashboardFrame extends JFrame {
+public class AdminDashboardFrame extends JFrame {
 
     private final ApiClient apiClient;
 
-    public ReceptionistDashboardFrame(ApiClient apiClient) {
-        super("Receptionist Dashboard");
+    public AdminDashboardFrame(ApiClient apiClient) {
+        super("Admin Dashboard");
         this.apiClient = apiClient;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 350);
@@ -17,16 +21,12 @@ public class ReceptionistDashboardFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel welcome = new JLabel("Welcome, " + AppSession.getStaffID() + " (Receptionist)");
+        JLabel welcome = new JLabel("Welcome, " + AppSession.getStaffID() + " (Admin)");
         welcome.setFont(welcome.getFont().deriveFont(Font.BOLD, 15f));
         panel.add(welcome, BorderLayout.NORTH);
 
-        JPanel actions = new JPanel(new GridLayout(0, 1, 8, 8));
-        JButton registerAppointmentButton = new JButton("Register Appointment");
-        registerAppointmentButton.addActionListener(e ->
-                new RegisterAppointmentDialog(this, apiClient).setVisible(true));
-        actions.add(registerAppointmentButton);
-        panel.add(actions, BorderLayout.CENTER);
+        JLabel placeholder = new JLabel("Staff / Treatment / Report management coming soon.", SwingConstants.CENTER);
+        panel.add(placeholder, BorderLayout.CENTER);
 
         JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(e -> logout());

@@ -1,13 +1,17 @@
-package com.sunrisedentalclinic.client;
+package com.sunrisedentalclinic.client.ui.dashboard;
+
+import com.sunrisedentalclinic.client.ApiClient;
+import com.sunrisedentalclinic.client.AppSession;
+import com.sunrisedentalclinic.client.ui.LoginFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AdminDashboardFrame extends JFrame {
+public class DentistDashboardFrame extends JFrame {
 
     private final ApiClient apiClient;
 
-    public AdminDashboardFrame(ApiClient apiClient) {
+    public DentistDashboardFrame(ApiClient apiClient) {
         super("Admin Dashboard");
         this.apiClient = apiClient;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,11 +21,11 @@ public class AdminDashboardFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel welcome = new JLabel("Welcome, " + AppSession.getStaffID() + " (Admin)");
+        JLabel welcome = new JLabel("Welcome, " + AppSession.getStaffID() + " (Dentist)");
         welcome.setFont(welcome.getFont().deriveFont(Font.BOLD, 15f));
         panel.add(welcome, BorderLayout.NORTH);
 
-        JLabel placeholder = new JLabel("Staff / Treatment / Report management coming soon.", SwingConstants.CENTER);
+        JLabel placeholder = new JLabel("Upcoming appointments view coming soon.", SwingConstants.CENTER);
         panel.add(placeholder, BorderLayout.CENTER);
 
         JButton logoutButton = new JButton("Logout");

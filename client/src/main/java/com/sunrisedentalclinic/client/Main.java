@@ -1,5 +1,6 @@
 package com.sunrisedentalclinic.client;
 
+import com.sunrisedentalclinic.client.ui.LoginFrame;
 import javax.swing.SwingUtilities;
 
 public class Main {
