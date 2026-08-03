@@ -1,5 +1,6 @@
-package com.sunrisedentalclinic.client;
+package com.sunrisedentalclinic.client.ui.panels.receptionist;
 
+import com.sunrisedentalclinic.client.ApiClient;
 import com.sunrisedentalclinic.client.dto.*;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class RegisterAppointmentDialog extends JDialog {
+public class RegisterAppointmentPanel extends JPanel {
 
     private final JComboBox<ComboItem> patientBox = new JComboBox<>();
     private final JComboBox<ComboItem> dentistBox = new JComboBox<>();
@@ -20,25 +21,19 @@ public class RegisterAppointmentDialog extends JDialog {
 
     private final ApiClient apiClient;
 
-    public RegisterAppointmentDialog(Frame owner, ApiClient apiClient) {
-        super(owner, "Register Appointment", true);
+    public RegisterAppointmentPanel(ApiClient apiClient) {
         this.apiClient = apiClient;
-        setSize(420, 340);
-        setLocationRelativeTo(owner);
 
-        // Date spinner: defaults to today, "roll" via up/down arrows
         dateSpinner = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
         dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd"));
 
-        // Time spinner: defaults to now, rolls by the hour field but full HH:mm editable
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.MINUTE, (cal.get(Calendar.MINUTE) / 15) * 15); // round to nearest 15 min
+        cal.set(Calendar.MINUTE, (cal.get(Calendar.MINUTE) / 15) * 15);
         timeSpinner = new JSpinner(new SpinnerDateModel(cal.getTime(), null, null, Calendar.MINUTE));
         timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm"));
 
         JPanel form = new JPanel(new GridLayout(0, 2, 8, 8));
-        form.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+        form.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         form.add(new JLabel("Patient:"));
         form.add(patientBox);
         form.add(new JLabel("Dentist:"));
@@ -55,14 +50,11 @@ public class RegisterAppointmentDialog extends JDialog {
         JPanel south = new JPanel(new BorderLayout());
         south.add(statusLabel, BorderLayout.CENTER);
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> dispose());
-        buttonRow.add(cancelButton);
         buttonRow.add(submitButton);
         south.add(buttonRow, BorderLayout.SOUTH);
 
         setLayout(new BorderLayout(10, 10));
-        add(form, BorderLayout.CENTER);
+        add(form, BorderLayout.NORTH);
         add(south, BorderLayout.SOUTH);
 
         submitButton.addActionListener(e -> submit());
@@ -115,16 +107,14 @@ public class RegisterAppointmentDialog extends JDialog {
                     return;
                 }
                 for (PatientDto p : patients) {
-                    patientBox.addItem(new ComboItem(p.getPatientID(),
-                            p.getPatientID() + " - " + p.getName()));
+                    patientBox.addItem(new ComboItem(p.getPatientID(), p.getPatientID() + " - " + p.getName()));
                 }
                 for (DentistDto d : dentists) {
                     dentistBox.addItem(new ComboItem(d.getStaffID(),
                             d.getStaffID() + " - " + d.getName() + " (" + d.getSpecialization() + ")"));
                 }
                 for (TreatmentDto t : treatments) {
-                    treatmentBox.addItem(new ComboItem(t.getTreatmentID(),
-                            t.getTreatmentName() + " - $" + t.getBaseCost()));
+                    treatmentBox.addItem(new ComboItem(t.getTreatmentID(), t.getTreatmentName() + " - $" + t.getBaseCost()));
                 }
                 statusLabel.setText(" ");
                 setDropdownsLoading(false);
@@ -161,9 +151,7 @@ public class RegisterAppointmentDialog extends JDialog {
                     ApiClient.ApiResponse<AppointmentDto> resp = apiClient.registerAppointment(
                             patient.id, dentist.id, treatment.id, date, time);
                     statusCode = resp.statusCode;
-                    if (resp.body != null) {
-                        appointmentNo = resp.body.getAppointmentNo();
-                    }
+                    if (resp.body != null) appointmentNo = resp.body.getAppointmentNo();
                     errorMessage = resp.errorMessage;
                 } catch (Exception ex) {
                     statusCode = -1;
@@ -176,10 +164,8 @@ public class RegisterAppointmentDialog extends JDialog {
             protected void done() {
                 submitButton.setEnabled(true);
                 if (statusCode == 201) {
-                    JOptionPane.showMessageDialog(RegisterAppointmentDialog.this,
-                            "Appointment registered.\nAppointment No: " + appointmentNo,
-                            "Success", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                    statusLabel.setForeground(new Color(0, 128, 0));
+                    statusLabel.setText("Appointment registered. No: " + appointmentNo);
                 } else if (statusCode == 409) {
                     statusLabel.setForeground(Color.RED);
                     statusLabel.setText("Slot unavailable: " + errorMessage);
@@ -191,26 +177,16 @@ public class RegisterAppointmentDialog extends JDialog {
                     statusLabel.setText("Forbidden: receptionist role required.");
                 } else {
                     statusLabel.setForeground(Color.RED);
-                    statusLabel.setText(errorMessage != null ? errorMessage
-                            : "Unexpected error (status " + statusCode + ").");
+                    statusLabel.setText(errorMessage != null ? errorMessage : "Unexpected error (status " + statusCode + ").");
                 }
             }
         }.execute();
     }
 
-    /** Wraps an ID with a display label for combo boxes. */
     private static class ComboItem {
         final String id;
         final String label;
-
-        ComboItem(String id, String label) {
-            this.id = id;
-            this.label = label;
-        }
-
-        @Override
-        public String toString() {
-            return label;
-        }
+        ComboItem(String id, String label) { this.id = id; this.label = label; }
+        @Override public String toString() { return label; }
     }
 }

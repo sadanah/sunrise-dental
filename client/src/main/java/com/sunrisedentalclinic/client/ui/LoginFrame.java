@@ -1,6 +1,11 @@
-package com.sunrisedentalclinic.client;
+package com.sunrisedentalclinic.client.ui;
 
+import com.sunrisedentalclinic.client.ApiClient;
+import com.sunrisedentalclinic.client.AppSession;
 import com.sunrisedentalclinic.client.dto.SessionDto;
+import com.sunrisedentalclinic.client.ui.dashboard.AdminDashboardFrame;
+import com.sunrisedentalclinic.client.ui.dashboard.DentistDashboardFrame;
+import com.sunrisedentalclinic.client.ui.dashboard.ReceptionistDashboardFrame;
 
 import javax.swing.*;
 import java.awt.*;
