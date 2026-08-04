@@ -60,8 +60,9 @@ public class AppointmentApiServlet extends HttpServlet {
         }
 
         String appointmentNo = request.getParameter("appointmentNo");
+
         if (appointmentNo == null || appointmentNo.isBlank()) {
-            JsonUtil.writeJson(response, 400, new ApiError("appointmentNo query parameter is required"));
+            JsonUtil.writeJson(response, 200, clinicFacade.getAllAppointments());
             return;
         }
 

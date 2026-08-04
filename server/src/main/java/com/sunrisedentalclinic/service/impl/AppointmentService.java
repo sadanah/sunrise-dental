@@ -9,6 +9,7 @@ import com.sunrisedentalclinic.exception.SlotUnavailableException;
 import com.sunrisedentalclinic.service.IAppointmentService;
 import com.sunrisedentalclinic.service.INotificationService;
 
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -42,6 +43,11 @@ public class AppointmentService implements IAppointmentService {
         notificationService.update(appointment);
 
         return appointment;
+    }
+
+    @Override
+    public List<Appointment> getAllAppointments() {
+        return appointmentDAO.findAll();
     }
 
     @Override
