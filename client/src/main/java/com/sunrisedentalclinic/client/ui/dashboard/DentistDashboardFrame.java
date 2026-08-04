@@ -3,38 +3,56 @@ package com.sunrisedentalclinic.client.ui.dashboard;
 import com.sunrisedentalclinic.client.ApiClient;
 import com.sunrisedentalclinic.client.AppSession;
 import com.sunrisedentalclinic.client.ui.LoginFrame;
+import com.sunrisedentalclinic.client.ui.components.SidebarPanel;
+import com.sunrisedentalclinic.client.ui.panels.receptionist.HomePanel;
+import com.sunrisedentalclinic.client.ui.panels.dentist.DentistAppointmentsPanel;
+import com.sunrisedentalclinic.client.ui.panels.dentist.DentistPatientsPanel;
+import com.sunrisedentalclinic.client.ui.util.IconLoader;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DentistDashboardFrame extends JFrame {
 
+    private static final String HOME = "HOME";
+    private static final String APPOINTMENTS = "APPOINTMENTS";
+    private static final String PATIENTS = "PATIENTS";
+
     private final ApiClient apiClient;
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel contentPanel = new JPanel(cardLayout);
 
     public DentistDashboardFrame(ApiClient apiClient) {
-        super("Admin Dashboard");
+        super("Sunrise Dental Clinic — Dentist");
         this.apiClient = apiClient;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 350);
+        setSize(1000, 650);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        SidebarPanel sidebar = new SidebarPanel(this::navigate);
+        sidebar.addNavButton("Dashboard", IconLoader.load("home.png"), HOME, this::navigate);
+        sidebar.addSection("My Appointments", IconLoader.load("appointment.png"));
+        sidebar.addNavButton("View / Search", null, APPOINTMENTS, this::navigate);
+        sidebar.addSection("My Patients", IconLoader.load("patient.png"));
+        sidebar.addNavButton("View", null, PATIENTS, this::navigate);
+        sidebar.addGlue();
+        sidebar.addNavButton("Logout", IconLoader.load("logout.png"), "LOGOUT", this::navigate);
 
-        JLabel welcome = new JLabel("Welcome, " + AppSession.getStaffID() + " (Dentist)");
-        welcome.setFont(welcome.getFont().deriveFont(Font.BOLD, 15f));
-        panel.add(welcome, BorderLayout.NORTH);
+        contentPanel.add(new HomePanel(), HOME);
+        contentPanel.add(new DentistAppointmentsPanel(apiClient), APPOINTMENTS);
+        contentPanel.add(new DentistPatientsPanel(apiClient), PATIENTS);
 
-        JLabel placeholder = new JLabel("Upcoming appointments view coming soon.", SwingConstants.CENTER);
-        panel.add(placeholder, BorderLayout.CENTER);
+        add(sidebar, BorderLayout.WEST);
+        add(contentPanel, BorderLayout.CENTER);
+    }
 
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(e -> logout());
-        JPanel south = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        south.add(logoutButton);
-        panel.add(south, BorderLayout.SOUTH);
-
-        add(panel);
+    private void navigate(String key) {
+        if (key.equals("LOGOUT")) {
+            logout();
+            return;
+        }
+        cardLayout.show(contentPanel, key);
     }
 
     private void logout() {
