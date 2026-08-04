@@ -33,6 +33,9 @@ public class GenerateReportsPanel extends JPanel {
     private final JLabel headerLabel = new JLabel(" ");
     private final JLabel revenueLabel = new JLabel(" ");
 
+    private final CardLayout resultsCardLayout = new CardLayout();
+    private final JPanel resultsCards = new JPanel(resultsCardLayout);
+
     private final String[] apptColumns = {"Appointment No", "Patient ID", "Dentist ID", "Treatment ID", "Date", "Time", "Status"};
     private final DefaultTableModel apptTableModel = new DefaultTableModel(apptColumns, 0) {
         @Override public boolean isCellEditable(int row, int col) { return false; }
@@ -91,10 +94,11 @@ public class GenerateReportsPanel extends JPanel {
         headerLabel.setFont(headerLabel.getFont().deriveFont(Font.BOLD));
         resultsPanel.add(headerLabel, BorderLayout.NORTH);
         revenueLabel.setFont(revenueLabel.getFont().deriveFont(18f));
-        revenueLabel.setVisible(false);
-        resultsPanel.add(revenueLabel, BorderLayout.CENTER);
-        apptScrollPane.setVisible(false);
-        resultsPanel.add(apptScrollPane, BorderLayout.CENTER);
+
+        resultsCards.add(revenueLabel, "REVENUE_VIEW");
+        resultsCards.add(apptScrollPane, "TABLE_VIEW");
+        resultsPanel.add(resultsCards, BorderLayout.CENTER);
+
         add(resultsPanel, BorderLayout.CENTER);
 
         typeBox.addActionListener(e -> updateFieldsForType());
@@ -168,8 +172,8 @@ public class GenerateReportsPanel extends JPanel {
         generateButton.setEnabled(false);
         statusLabel.setForeground(Color.DARK_GRAY);
         statusLabel.setText("Generating...");
-        revenueLabel.setVisible(false);
-        apptScrollPane.setVisible(false);
+//        revenueLabel.setVisible(false);
+//        apptScrollPane.setVisible(false);
         headerLabel.setText(" ");
 
         String finalDentistID = dentistID;
@@ -206,7 +210,7 @@ public class GenerateReportsPanel extends JPanel {
 
                     if (REVENUE.equals(type)) {
                         revenueLabel.setText("Total Revenue: $" + result.get("totalRevenue"));
-                        revenueLabel.setVisible(true);
+                        resultsCardLayout.show(resultsCards, "REVENUE_VIEW");
                     } else {
                         apptTableModel.setRowCount(0);
                         Object appointmentsObj = result.get("appointments");
@@ -219,7 +223,7 @@ public class GenerateReportsPanel extends JPanel {
                                 });
                             }
                         }
-                        apptScrollPane.setVisible(true);
+                        resultsCardLayout.show(resultsCards, "TABLE_VIEW");
                     }
                 } else {
                     statusLabel.setForeground(Color.RED);
