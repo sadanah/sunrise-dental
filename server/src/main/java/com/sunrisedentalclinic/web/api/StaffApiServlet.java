@@ -30,6 +30,9 @@ public class StaffApiServlet extends HttpServlet {
             if ("delete".equals(r.getAction())) {
                 Staff dummy = new Receptionist(0, "", "", "", r.getStaffID(), "", "");
                 adminService.manageStaff("delete", dummy);
+            } else if ("update".equals(r.getAction())) {
+                Staff staff = buildForUpdate(r);
+                adminService.manageStaff("update", staff);
             } else {
                 Staff staff = build(r);
                 adminService.manageStaff(r.getAction(), staff);
@@ -42,6 +45,22 @@ public class StaffApiServlet extends HttpServlet {
 
     private Staff build(StaffRequest r) {
         String hash = com.sunrisedentalclinic.util.PasswordUtil.hash(r.getPassword());
+        if ("DENTIST".equals(r.getRole()))
+            return new Dentist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash, r.getSpecialization(), new BigDecimal(r.getConsultationFee()));
+        if ("ADMIN".equals(r.getRole()))
+            return new Admin(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+        return new Receptionist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+    }
+
+    // For updates: if password is blank, keep the existing hash instead of hashing "" and locking the user out.
+    private Staff buildForUpdate(StaffRequest r) {
+        String hash;
+        if (r.getPassword() != null && !r.getPassword().isBlank()) {
+            hash = com.sunrisedentalclinic.util.PasswordUtil.hash(r.getPassword());
+        } else {
+            Staff existing = staffDAO.findById(r.getStaffID());
+            hash = existing != null ? existing.getPasswordHash() : "";
+        }
         if ("DENTIST".equals(r.getRole()))
             return new Dentist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash, r.getSpecialization(), new BigDecimal(r.getConsultationFee()));
         if ("ADMIN".equals(r.getRole()))

@@ -17,7 +17,9 @@ public class ReportApiServlet extends HttpServlet {
     public ReportApiServlet(IAdminService a) { adminService = a; }
 
     @Override protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        String sessionID = ApiSessionUtil.getCurrentSession(req) != null ? ApiSessionUtil.getCurrentSession(req).getSessionID() : null;
+        if (!ApiSessionUtil.hasRole(req, "ADMIN")) { JsonUtil.writeJson(res, 403, new ApiError("Forbidden")); return; }
+
+        String sessionID = ApiSessionUtil.getCurrentSession(req).getSessionID();
         try {
             ReportRequest r = JsonUtil.readJson(req, ReportRequest.class);
             LocalDate start = r.getStartDate() != null && !r.getStartDate().isEmpty() ? LocalDate.parse(r.getStartDate()) : null;
