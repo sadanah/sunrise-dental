@@ -5,6 +5,7 @@ import com.sunrisedentalclinic.client.AppSession;
 import com.sunrisedentalclinic.client.ui.LoginFrame;
 import com.sunrisedentalclinic.client.ui.components.SidebarPanel;
 import com.sunrisedentalclinic.client.ui.panels.admin.HomePanel;
+import com.sunrisedentalclinic.client.ui.panels.HelpPanel;
 import com.sunrisedentalclinic.client.ui.panels.admin.ManageTreatmentsPanel;
 import com.sunrisedentalclinic.client.ui.panels.admin.ManageStaffPanel;
 import com.sunrisedentalclinic.client.ui.panels.admin.GenerateReportsPanel;
@@ -19,6 +20,7 @@ public class AdminDashboardFrame extends JFrame {
     private static final String MANAGE_TREATMENTS = "MANAGE_TREATMENTS";
     private static final String MANAGE_STAFF = "MANAGE_STAFF";
     private static final String GENERATE_REPORT = "GENERATE_REPORT";
+    private static final String HELP = "HELP";
 
     private final ApiClient apiClient;
     private final CardLayout cardLayout = new CardLayout();
@@ -41,12 +43,14 @@ public class AdminDashboardFrame extends JFrame {
         sidebar.addSection("Reports", IconLoader.load("report.png"));
         sidebar.addNavButton("Generate Report", null, GENERATE_REPORT, this::navigate);
         sidebar.addGlue();
+        sidebar.addNavButton("Help", null, HELP, this::navigate);
         sidebar.addNavButton("Logout", IconLoader.load("logout.png"), "LOGOUT", this::navigate);
 
         contentPanel.add(new HomePanel(), HOME);
         contentPanel.add(new ManageTreatmentsPanel(apiClient), MANAGE_TREATMENTS);
         contentPanel.add(new ManageStaffPanel(apiClient), MANAGE_STAFF);
         contentPanel.add(new GenerateReportsPanel(apiClient), GENERATE_REPORT);
+        contentPanel.add(new HelpPanel(apiClient), HELP);
 
         add(sidebar, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);

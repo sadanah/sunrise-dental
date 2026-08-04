@@ -1,4 +1,4 @@
-package com.sunrisedentalclinic.client.ui.panels.receptionist;
+package com.sunrisedentalclinic.client.ui.panels.dentist;
 
 import com.sunrisedentalclinic.client.AppSession;
 

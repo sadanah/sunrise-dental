@@ -4,6 +4,7 @@ import com.sunrisedentalclinic.client.ApiClient;
 import com.sunrisedentalclinic.client.AppSession;
 import com.sunrisedentalclinic.client.ui.LoginFrame;
 import com.sunrisedentalclinic.client.ui.components.SidebarPanel;
+import com.sunrisedentalclinic.client.ui.panels.HelpPanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.HomePanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.DentistAppointmentsPanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.DentistPatientsPanel;
@@ -17,6 +18,7 @@ public class DentistDashboardFrame extends JFrame {
     private static final String HOME = "HOME";
     private static final String APPOINTMENTS = "APPOINTMENTS";
     private static final String PATIENTS = "PATIENTS";
+    private static final String HELP = "HELP";
 
     private final ApiClient apiClient;
     private final CardLayout cardLayout = new CardLayout();
@@ -37,11 +39,13 @@ public class DentistDashboardFrame extends JFrame {
         sidebar.addSection("My Patients", IconLoader.load("patient.png"));
         sidebar.addNavButton("View", null, PATIENTS, this::navigate);
         sidebar.addGlue();
+        sidebar.addNavButton("Help", null, HELP, this::navigate);
         sidebar.addNavButton("Logout", IconLoader.load("logout.png"), "LOGOUT", this::navigate);
 
         contentPanel.add(new HomePanel(), HOME);
         contentPanel.add(new DentistAppointmentsPanel(apiClient), APPOINTMENTS);
         contentPanel.add(new DentistPatientsPanel(apiClient), PATIENTS);
+        contentPanel.add(new HelpPanel(apiClient), HELP);
 
         add(sidebar, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
