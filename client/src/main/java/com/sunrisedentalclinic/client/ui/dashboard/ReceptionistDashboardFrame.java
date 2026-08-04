@@ -8,6 +8,7 @@ import com.sunrisedentalclinic.client.ui.panels.receptionist.HomePanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.PatientPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.RegisterAppointmentPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.SearchAppointmentPanel;
+import com.sunrisedentalclinic.client.ui.panels.receptionist.GenerateBillPanel;
 import com.sunrisedentalclinic.client.ui.util.IconLoader;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class ReceptionistDashboardFrame extends JFrame {
     private static final String HOME = "HOME";
     private static final String REGISTER_APPOINTMENT = "REGISTER_APPOINTMENT";
     private static final String SEARCH_APPOINTMENT = "SEARCH_APPOINTMENT";
+    private static final String GENERATE_BILL = "GENERATE_BILL";
     private static final String PATIENT = "PATIENT";
 
     private final ApiClient apiClient;
@@ -37,6 +39,7 @@ public class ReceptionistDashboardFrame extends JFrame {
         sidebar.addSection("Appointments", IconLoader.load("appointment.png"));
         sidebar.addNavButton("Register", null, REGISTER_APPOINTMENT, this::navigate);
         sidebar.addNavButton("Search", null, SEARCH_APPOINTMENT, this::navigate);
+        sidebar.addNavButton("Generate Bill", null, GENERATE_BILL, this::navigate);
         sidebar.addSection("Patients", IconLoader.load("patient.png"));
         sidebar.addNavButton("Register / Search", null, PATIENT, this::navigate);
         sidebar.addGlue();
@@ -45,6 +48,7 @@ public class ReceptionistDashboardFrame extends JFrame {
         contentPanel.add(new HomePanel(), HOME);
         contentPanel.add(new RegisterAppointmentPanel(apiClient), REGISTER_APPOINTMENT);
         contentPanel.add(new SearchAppointmentPanel(apiClient), SEARCH_APPOINTMENT);
+        contentPanel.add(new GenerateBillPanel(apiClient), GENERATE_BILL);
         contentPanel.add(new PatientPanel(apiClient), PATIENT);
 
         add(sidebar, BorderLayout.WEST);
