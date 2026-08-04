@@ -5,7 +5,8 @@ import com.sunrisedentalclinic.client.AppSession;
 import com.sunrisedentalclinic.client.ui.LoginFrame;
 import com.sunrisedentalclinic.client.ui.components.SidebarPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.HomePanel;
-import com.sunrisedentalclinic.client.ui.panels.receptionist.PatientPanel;
+import com.sunrisedentalclinic.client.ui.panels.receptionist.RegisterPatientPanel;
+import com.sunrisedentalclinic.client.ui.panels.receptionist.SearchPatientsPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.RegisterAppointmentPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.SearchAppointmentPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.GenerateBillPanel;
@@ -20,7 +21,8 @@ public class ReceptionistDashboardFrame extends JFrame {
     private static final String REGISTER_APPOINTMENT = "REGISTER_APPOINTMENT";
     private static final String SEARCH_APPOINTMENT = "SEARCH_APPOINTMENT";
     private static final String GENERATE_BILL = "GENERATE_BILL";
-    private static final String PATIENT = "PATIENT";
+    private static final String REGISTER_PATIENT = "REGISTER_PATIENT";
+    private static final String SEARCH_PATIENT = "SEARCH_PATIENT";
 
     private final ApiClient apiClient;
     private final CardLayout cardLayout = new CardLayout();
@@ -41,7 +43,8 @@ public class ReceptionistDashboardFrame extends JFrame {
         sidebar.addNavButton("Search", null, SEARCH_APPOINTMENT, this::navigate);
         sidebar.addNavButton("Generate Bill", null, GENERATE_BILL, this::navigate);
         sidebar.addSection("Patients", IconLoader.load("patient.png"));
-        sidebar.addNavButton("Register / Search", null, PATIENT, this::navigate);
+        sidebar.addNavButton("Register", null, REGISTER_PATIENT, this::navigate);
+        sidebar.addNavButton("Search", null, SEARCH_PATIENT, this::navigate);
         sidebar.addGlue();
         sidebar.addNavButton("Logout", IconLoader.load("logout.png"), "LOGOUT", this::navigate);
 
@@ -49,7 +52,8 @@ public class ReceptionistDashboardFrame extends JFrame {
         contentPanel.add(new RegisterAppointmentPanel(apiClient), REGISTER_APPOINTMENT);
         contentPanel.add(new SearchAppointmentPanel(apiClient), SEARCH_APPOINTMENT);
         contentPanel.add(new GenerateBillPanel(apiClient), GENERATE_BILL);
-        contentPanel.add(new PatientPanel(apiClient), PATIENT);
+        contentPanel.add(new RegisterPatientPanel(apiClient), REGISTER_PATIENT);
+        contentPanel.add(new SearchPatientsPanel(apiClient), SEARCH_PATIENT);
 
         add(sidebar, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
