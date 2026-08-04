@@ -3,6 +3,7 @@ package com.sunrisedentalclinic.service;
 import com.sunrisedentalclinic.domain.Appointment;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public interface IAppointmentService {
     Appointment registerAppointment(String patientID, String dentistID, String treatmentID,
@@ -11,4 +12,5 @@ public interface IAppointmentService {
     Appointment searchAppointment(String appointmentNo);
     void updateStatus(String appointmentNo, String status);
     boolean checkAvailability(String dentistID, LocalDate date, LocalTime time);
+    List<Appointment> getAllAppointments();
 }

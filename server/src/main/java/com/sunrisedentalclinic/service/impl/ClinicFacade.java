@@ -7,6 +7,7 @@ import com.sunrisedentalclinic.service.IAppointmentService;
 import com.sunrisedentalclinic.service.IAuthService;
 import com.sunrisedentalclinic.service.IBillingService;
 
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -41,5 +42,9 @@ public class ClinicFacade {
 
     public Appointment searchAppointment(String appointmentNo) {
         return appointmentService.searchAppointment(appointmentNo);
+    }
+
+    public List<Appointment> getAllAppointments() {
+        return appointmentService.getAllAppointments();
     }
 }

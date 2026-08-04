@@ -168,4 +168,8 @@ public class ApiClient {
     public ApiResponse<DentistDto[]> getDentists() throws Exception {
         return get("/api/dentists", DentistDto[].class);
     }
+
+    public ApiResponse<AppointmentDto[]> getAllAppointments() throws Exception {
+        return get("/api/appointments", AppointmentDto[].class);
+    }
 }
