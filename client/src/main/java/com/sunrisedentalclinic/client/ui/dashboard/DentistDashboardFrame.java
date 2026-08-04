@@ -4,7 +4,7 @@ import com.sunrisedentalclinic.client.ApiClient;
 import com.sunrisedentalclinic.client.AppSession;
 import com.sunrisedentalclinic.client.ui.LoginFrame;
 import com.sunrisedentalclinic.client.ui.components.SidebarPanel;
-import com.sunrisedentalclinic.client.ui.panels.receptionist.HomePanel;
+import com.sunrisedentalclinic.client.ui.panels.dentist.HomePanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.DentistAppointmentsPanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.DentistPatientsPanel;
 import com.sunrisedentalclinic.client.ui.util.IconLoader;
