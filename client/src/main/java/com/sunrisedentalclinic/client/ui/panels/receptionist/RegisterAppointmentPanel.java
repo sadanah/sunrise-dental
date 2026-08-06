@@ -133,8 +133,37 @@ public class RegisterAppointmentPanel extends JPanel {
             return;
         }
 
-        String date = new SimpleDateFormat("yyyy-MM-dd").format((Date) dateSpinner.getValue());
-        String time = new SimpleDateFormat("HH:mm").format((Date) timeSpinner.getValue());
+        String date = new SimpleDateFormat("yyyy-MM-dd")
+                .format((Date) dateSpinner.getValue());
+
+        String time = new SimpleDateFormat("HH:mm")
+                .format((Date) timeSpinner.getValue());
+
+        Date selectedDate = (Date) dateSpinner.getValue();
+        Date selectedTime = (Date) timeSpinner.getValue();
+
+        Calendar appointment = Calendar.getInstance();
+        appointment.setTime(selectedDate);
+
+        Calendar selectedTimeCalendar = Calendar.getInstance();
+        selectedTimeCalendar.setTime(selectedTime);
+
+        appointment.set(
+                Calendar.HOUR_OF_DAY,
+                selectedTimeCalendar.get(Calendar.HOUR_OF_DAY)
+        );
+        appointment.set(
+                Calendar.MINUTE,
+                selectedTimeCalendar.get(Calendar.MINUTE)
+        );
+        appointment.set(Calendar.SECOND, 0);
+        appointment.set(Calendar.MILLISECOND, 0);
+
+        if (appointment.getTime().before(new Date())) {
+            statusLabel.setForeground(Color.RED);
+            statusLabel.setText("Appointment date/time cannot be in the past.");
+            return;
+        }
 
         submitButton.setEnabled(false);
         statusLabel.setForeground(Color.DARK_GRAY);
@@ -148,40 +177,67 @@ public class RegisterAppointmentPanel extends JPanel {
             @Override
             protected Void doInBackground() {
                 try {
-                    ApiClient.ApiResponse<AppointmentDto> resp = apiClient.registerAppointment(
-                            patient.id, dentist.id, treatment.id, date, time);
+                    ApiClient.ApiResponse<AppointmentDto> resp =
+                            apiClient.registerAppointment(
+                                    patient.id,
+                                    dentist.id,
+                                    treatment.id,
+                                    date,
+                                    time
+                            );
+
                     statusCode = resp.statusCode;
-                    if (resp.body != null) appointmentNo = resp.body.getAppointmentNo();
+
+                    if (resp.body != null) {
+                        appointmentNo = resp.body.getAppointmentNo();
+                    }
+
                     errorMessage = resp.errorMessage;
+
                 } catch (Exception ex) {
                     statusCode = -1;
                     errorMessage = "Error contacting server: " + ex.getMessage();
                 }
+
                 return null;
             }
 
             @Override
             protected void done() {
                 submitButton.setEnabled(true);
+
                 if (statusCode == 201) {
                     statusLabel.setForeground(new Color(0, 128, 0));
-                    statusLabel.setText("Appointment registered. No: " + appointmentNo);
+                    statusLabel.setText(
+                            "Appointment registered. No: " + appointmentNo
+                    );
+
                 } else if (statusCode == 409) {
                     statusLabel.setForeground(Color.RED);
                     statusLabel.setText("Slot unavailable: " + errorMessage);
+
                 } else if (statusCode == 400) {
                     statusLabel.setForeground(Color.RED);
                     statusLabel.setText("Invalid request: " + errorMessage);
+
                 } else if (statusCode == 403) {
                     statusLabel.setForeground(Color.RED);
-                    statusLabel.setText("Forbidden: receptionist role required.");
+                    statusLabel.setText(
+                            "Forbidden: receptionist role required."
+                    );
+
                 } else {
                     statusLabel.setForeground(Color.RED);
-                    statusLabel.setText(errorMessage != null ? errorMessage : "Unexpected error (status " + statusCode + ").");
+                    statusLabel.setText(
+                            errorMessage != null
+                                    ? errorMessage
+                                    : "Unexpected error (status " + statusCode + ")."
+                    );
                 }
             }
         }.execute();
     }
+
 
     private static class ComboItem {
         final String id;

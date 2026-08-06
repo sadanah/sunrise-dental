@@ -3,6 +3,8 @@ package com.sunrisedentalclinic.client.ui.panels.admin;
 import com.sunrisedentalclinic.client.ApiClient;
 import com.sunrisedentalclinic.client.dto.StaffDto;
 
+import java.util.regex.Pattern;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -10,6 +12,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ManageStaffPanel extends JPanel {
+
+    private static final Pattern EMAIL_PATTERN =
+            Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+
+    private static final Pattern USERNAME_PATTERN =
+            Pattern.compile("^[A-Za-z_]{3,}$");
+
+    private static final Pattern PASSWORD_SPECIAL_PATTERN =
+            Pattern.compile(".*[^A-Za-z0-9].*");
 
     private StaffDto[] allStaff = new StaffDto[0];
     private final String[] columns = {"Staff ID", "Name", "Role", "Username"};
@@ -21,6 +32,7 @@ public class ManageStaffPanel extends JPanel {
     private final JTextField idField = new JTextField(15);
     private final JTextField nameField = new JTextField(20);
     private final JTextField contactField = new JTextField(20);
+    private final JTextField emailField = new JTextField(20);
     private final JTextField addressField = new JTextField(20);
     private final JTextField usernameField = new JTextField(20);
     private final JPasswordField passwordField = new JPasswordField(20);
@@ -61,6 +73,8 @@ public class ManageStaffPanel extends JPanel {
         form.add(nameField);
         form.add(new JLabel("Contact No:"));
         form.add(contactField);
+        form.add(new JLabel("Email:"));
+        form.add(emailField);
         form.add(new JLabel("Address:"));
         form.add(addressField);
         form.add(new JLabel("Username:"));
@@ -144,6 +158,7 @@ public class ManageStaffPanel extends JPanel {
         idField.setText("");
         nameField.setText("");
         contactField.setText("");
+        emailField.setText("");
         addressField.setText("");
         usernameField.setText("");
         passwordField.setText("");
@@ -202,6 +217,7 @@ public class ManageStaffPanel extends JPanel {
         String id = idField.getText().trim();
         String name = nameField.getText().trim();
         String contact = contactField.getText().trim();
+        String email = emailField.getText().trim();
         String address = addressField.getText().trim();
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
@@ -214,11 +230,55 @@ public class ManageStaffPanel extends JPanel {
             statusLabel.setText("All fields except password (on edit) are required.");
             return;
         }
-        if (!editMode && password.isEmpty()) {
+//        if (!editMode && password.isEmpty()) {
+//            statusLabel.setForeground(Color.RED);
+//            statusLabel.setText("Password is required for new staff.");
+//            return;
+//        }
+        // fake email validation
+        if (!EMAIL_PATTERN.matcher(email).matches()) {
             statusLabel.setForeground(Color.RED);
-            statusLabel.setText("Password is required for new staff.");
+            statusLabel.setText("Please enter a valid email address.");
             return;
         }
+
+// username
+        if (!USERNAME_PATTERN.matcher(username).matches()) {
+            statusLabel.setForeground(Color.RED);
+            statusLabel.setText("Username must be at least 3 characters and contain only letters and underscores.");
+            return;
+        }
+
+// password (new staff)
+        if (!editMode) {
+            if (password.length() < 8) {
+                statusLabel.setForeground(Color.RED);
+                statusLabel.setText("Password must be at least 8 characters.");
+                return;
+            }
+
+            if (!PASSWORD_SPECIAL_PATTERN.matcher(password).matches()) {
+                statusLabel.setForeground(Color.RED);
+                statusLabel.setText("Password must contain at least one special character.");
+                return;
+            }
+        }
+
+// password (editing existing staff)
+        if (editMode && !password.isBlank()) {
+            if (password.length() < 8) {
+                statusLabel.setForeground(Color.RED);
+                statusLabel.setText("Password must be at least 8 characters.");
+                return;
+            }
+
+            if (!PASSWORD_SPECIAL_PATTERN.matcher(password).matches()) {
+                statusLabel.setForeground(Color.RED);
+                statusLabel.setText("Password must contain at least one special character.");
+                return;
+            }
+        }
+
         if ("DENTIST".equals(role) && (specialization.isEmpty() || fee.isEmpty())) {
             statusLabel.setForeground(Color.RED);
             statusLabel.setText("Specialization and Consultation Fee are required for Dentists.");
