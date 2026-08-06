@@ -251,10 +251,10 @@ public class AppointmentDAO implements IDAO<Appointment> {
         return appointment;
     }
 
-    public List<Appointment> findByDentistAndDate(
-            String dentistID,
-            LocalDate date) {
-
+    /**
+     * Finds all appointments assigned to a specific dentist on a specific date.
+     */
+    public List<Appointment> findByDentistAndDate(String dentistID, LocalDate date) {
         List<Appointment> appointments = new ArrayList<>();
 
         String sql = "SELECT * FROM appointment " +

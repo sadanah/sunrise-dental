@@ -9,6 +9,7 @@ import java.util.List;
 public class DentistScheduleReport extends Report {
 
     private final String dentistID;
+    private final LocalDate startDate;
     private final AppointmentDAO appointmentDAO;
     private List<Appointment> appointments;
     private final LocalDate reportDate;
@@ -22,16 +23,13 @@ public class DentistScheduleReport extends Report {
 
         super(reportID, generatedBy);
         this.dentistID = dentistID;
-        this.reportDate = reportDate;
+        this.startDate = startDate;
         this.appointmentDAO = appointmentDAO;
     }
 
     @Override
     public void generate() {
-        appointments = appointmentDAO.findByDentistAndDate(
-                dentistID,
-                reportDate
-        );
+        appointments = appointmentDAO.findByDentistAndDate(dentistID, startDate);
     }
 
     public List<Appointment> getAppointments() {
