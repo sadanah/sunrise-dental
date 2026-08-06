@@ -12,12 +12,14 @@ public class DentistScheduleReport extends Report {
     private final LocalDate startDate;
     private final AppointmentDAO appointmentDAO;
     private List<Appointment> appointments;
+    private final LocalDate reportDate;
 
     public DentistScheduleReport(
             String reportID,
             String generatedBy,
             String dentistID,
-            LocalDate startDate, AppointmentDAO appointmentDAO) {
+            LocalDate reportDate,
+            AppointmentDAO appointmentDAO) {
 
         super(reportID, generatedBy);
         this.dentistID = dentistID;
