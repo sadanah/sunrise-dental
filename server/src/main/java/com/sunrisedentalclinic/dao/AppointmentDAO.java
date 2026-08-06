@@ -250,4 +250,35 @@ public class AppointmentDAO implements IDAO<Appointment> {
 
         return appointment;
     }
+
+    /**
+     * Finds all appointments assigned to a specific dentist on a specific date.
+     */
+    public List<Appointment> findByDentistAndDate(String dentistID, LocalDate date) {
+        List<Appointment> appointments = new ArrayList<>();
+
+        String sql = "SELECT * FROM appointment " +
+                "WHERE dentistID = ? " +
+                "AND appointmentDate = ? " +
+                "ORDER BY appointmentTime";
+
+        try (Connection conn = DBConnectionManager.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, dentistID);
+            stmt.setDate(2, Date.valueOf(date));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                appointments.add(mapRow(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Error finding appointments for dentist on date", e);
+        }
+
+        return appointments;
+    }
 }
