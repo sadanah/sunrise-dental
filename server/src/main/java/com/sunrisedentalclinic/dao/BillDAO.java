@@ -111,6 +111,7 @@ public class BillDAO implements IDAO<Bill> {
                 rs.getBigDecimal("treatmentCost")
         );
         bill.setAppointmentNo(rs.getString("appointmentNo"));
+        bill.overrideTotalAmount(rs.getBigDecimal("totalAmount"));
         return bill;
     }
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sunrisedentalclinic.client.dto.*;
-import com.sunrisedentalclinic.client.dto.DentistDto;
+
 import java.net.CookieManager;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,9 +19,14 @@ public class ApiClient {
     private final ObjectMapper mapper;
 
     public ApiClient() {
-        this.httpClient = HttpClient.newBuilder()
+        this(HttpClient.newBuilder()
                 .cookieHandler(new CookieManager())
-                .build();
+                .build());
+    }
+
+    // package-private constructor for testing — allows injecting a mock HttpClient
+    ApiClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
         this.mapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule())
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -110,6 +115,10 @@ public class ApiClient {
         return delete("/api/appointments?appointmentNo=" + appointmentNo);
     }
 
+    public ApiResponse<AppointmentDto[]> getAllAppointments() throws Exception {
+        return get("/api/appointments", AppointmentDto[].class);
+    }
+
     // ===== Billing =====
     public ApiResponse<BillDto> generateBill(String appointmentNo, String discountPercent) throws Exception {
         return post("/api/bills", Map.of("appointmentNo", appointmentNo,
@@ -161,15 +170,13 @@ public class ApiClient {
         return get("/api/help?topic=" + topic, Map.class);
     }
 
-    public ApiResponse<Void> logout() throws Exception {
-        return post("/api/logout", Map.of(), Void.class);
-    }
-
+    // ===== Dentists =====
     public ApiResponse<DentistDto[]> getDentists() throws Exception {
         return get("/api/dentists", DentistDto[].class);
     }
 
-    public ApiResponse<AppointmentDto[]> getAllAppointments() throws Exception {
-        return get("/api/appointments", AppointmentDto[].class);
+    // ===== Auth (logout) =====
+    public ApiResponse<Void> logout() throws Exception {
+        return post("/api/logout", Map.of(), Void.class);
     }
 }
