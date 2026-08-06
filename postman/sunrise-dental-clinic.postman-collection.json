@@ -1,0 +1,343 @@
+{
+  "info": {
+    "name": "Sunrise Dental Clinic API",
+    "description": "REST API for the Sunrise Dental Clinic system — covers auth, appointments, billing, staff, treatments, reports, patients, dentists, and help.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/sunrise-dental-clinic" },
+    { "key": "appointmentNo", "value": "" },
+    { "key": "billID", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - Receptionist",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"username\":\"receptionist1\",\"password\":\"pwd123\"}" },
+            "url": "{{baseUrl}}/api/login"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Response has sessionID', () => pm.expect(pm.response.json()).to.have.property('sessionID'));"
+            ]}
+          }]
+        },
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"username\":\"admin1\",\"password\":\"pwd123\"}" },
+            "url": "{{baseUrl}}/api/login"
+          }
+        },
+        {
+          "name": "Login - Dentist",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"username\":\"dentist1\",\"password\":\"pwd123\"}" },
+            "url": "{{baseUrl}}/api/login"
+          }
+        },
+        {
+          "name": "Login - Invalid Credentials",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"username\":\"receptionist1\",\"password\":\"wrongpassword\"}" },
+            "url": "{{baseUrl}}/api/login"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 401', () => pm.response.to.have.status(401));"
+            ]}
+          }]
+        },
+        {
+          "name": "Logout",
+          "request": { "method": "POST", "url": "{{baseUrl}}/api/logout" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "Register Appointment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"patientID\":\"P001\",\"dentistID\":\"D001\",\"treatmentID\":\"T001\",\"date\":\"2026-09-15\",\"time\":\"10:00\"}" },
+            "url": "{{baseUrl}}/api/appointments"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+              "const json = pm.response.json();",
+              "pm.test('Response has appointmentNo', () => pm.expect(json).to.have.property('appointmentNo'));",
+              "if (json.appointmentNo) pm.collectionVariables.set('appointmentNo', json.appointmentNo);"
+            ]}
+          }]
+        },
+        {
+          "name": "Register Appointment - Slot Unavailable (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"patientID\":\"P001\",\"dentistID\":\"D001\",\"treatmentID\":\"T001\",\"date\":\"2026-09-15\",\"time\":\"10:00\"}" },
+            "url": "{{baseUrl}}/api/appointments"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 409 (duplicate slot)', () => pm.response.to.have.status(409));"
+            ]}
+          }]
+        },
+        {
+          "name": "Search Appointment by Number",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/appointments?appointmentNo={{appointmentNo}}" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returned appointment matches requested number', () => pm.expect(pm.response.json().appointmentNo).to.eql(pm.collectionVariables.get('appointmentNo')));"
+            ]}
+          }]
+        },
+        {
+          "name": "Search Appointment - Not Found",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/appointments?appointmentNo=NONEXISTENT" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+            ]}
+          }]
+        },
+        {
+          "name": "View All Appointments",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/appointments" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+            ]}
+          }]
+        },
+        {
+          "name": "Cancel Appointment",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/appointments?appointmentNo={{appointmentNo}}" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "item": [
+        {
+          "name": "Generate Bill - No Discount",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"appointmentNo\":\"{{appointmentNo}}\",\"discountPercent\":\"\"}" },
+            "url": "{{baseUrl}}/api/bills"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200 or 201', () => pm.expect([200,201]).to.include(pm.response.code));",
+              "const json = pm.response.json();",
+              "if (json.billID) pm.collectionVariables.set('billID', json.billID);"
+            ]}
+          }]
+        },
+        {
+          "name": "Generate Bill - With Discount",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"appointmentNo\":\"{{appointmentNo}}\",\"discountPercent\":\"10\"}" },
+            "url": "{{baseUrl}}/api/bills"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "Get All Patients",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/patients" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+            ]}
+          }]
+        },
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"action\":\"create\",\"patientID\":\"\",\"name\":\"Test Patient\",\"contactNo\":\"0771234567\",\"address\":\"123 Test Rd\"}" },
+            "url": "{{baseUrl}}/api/patients"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Staff (Admin)",
+      "item": [
+        {
+          "name": "Get All Staff",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/admin/staff" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('No passwordHash field leaked', () => {",
+              "  const body = pm.response.json();",
+              "  body.forEach(s => pm.expect(s).to.not.have.property('passwordHash'));",
+              "});"
+            ]}
+          }]
+        },
+        {
+          "name": "Get All Staff - Forbidden as Non-Admin",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/admin/staff" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 403 when not logged in as admin', () => pm.response.to.have.status(403));"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Treatments",
+      "item": [
+        {
+          "name": "Get All Treatments (Receptionist+Admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/admin/treatments" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Reports (Admin)",
+      "item": [
+        {
+          "name": "Generate Revenue Report",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"type\":\"REVENUE\",\"startDate\":\"2026-01-01\",\"endDate\":\"2026-12-31\",\"dentistID\":\"\"}" },
+            "url": "{{baseUrl}}/api/admin/reports"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Response has totalRevenue', () => pm.expect(pm.response.json()).to.have.property('totalRevenue'));"
+            ]}
+          }]
+        },
+        {
+          "name": "Generate Daily Appointments Report",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"type\":\"DAILY_APPOINTMENTS\",\"startDate\":\"2026-08-01\",\"endDate\":\"\",\"dentistID\":\"\"}" },
+            "url": "{{baseUrl}}/api/admin/reports"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]}
+          }]
+        },
+        {
+          "name": "Generate Dentist Schedule Report",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"type\":\"DENTIST_SCHEDULE\",\"startDate\":\"2026-08-01\",\"endDate\":\"\",\"dentistID\":\"D001\"}" },
+            "url": "{{baseUrl}}/api/admin/reports"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Dentists",
+      "item": [
+        {
+          "name": "Get All Dentists",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/dentists" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('No passwordHash field leaked', () => {",
+              "  const body = pm.response.json();",
+              "  body.forEach(d => pm.expect(d).to.not.have.property('passwordHash'));",
+              "});"
+            ]}
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Help",
+      "item": [
+        {
+          "name": "Get Help Topics",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/help" },
+          "event": [{
+            "listen": "test",
+            "script": { "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]}
+          }]
+        }
+      ]
+    }
+  ]
+}
