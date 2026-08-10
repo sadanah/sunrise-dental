@@ -1,7 +1,8 @@
 package com.sunrisedentalclinic.client.ui.panels.receptionist;
 
 import com.sunrisedentalclinic.client.ApiClient;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import java.awt.*;
 
@@ -103,14 +104,14 @@ public class RegisterPatientPanel extends JPanel {
             @Override
             protected Void doInBackground() {
                 try {
-                    // Email is intentionally NOT sent to the backend.
-                    ApiClient.ApiResponse<Void> resp =
-                            apiClient.savePatient(
-                                    "create",
-                                    id,
-                                    name,
-                                    contact,
-                                    address);
+                    Map<String, String> fields = new HashMap<>();
+                    fields.put("action", "create");
+                    fields.put("patientID", id);
+                    fields.put("name", name);
+                    fields.put("contactNo", contact);
+                    fields.put("address", address);
+                    fields.put("email", email);
+                    ApiClient.ApiResponse<Void> resp = apiClient.savePatient(fields);
 
                     statusCode = resp.statusCode;
                     errorMessage = resp.errorMessage;

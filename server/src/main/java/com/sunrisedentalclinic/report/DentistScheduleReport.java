@@ -18,12 +18,14 @@ public class DentistScheduleReport extends Report {
             String reportID,
             String generatedBy,
             String dentistID,
+            LocalDate startDate,
             LocalDate reportDate,
             AppointmentDAO appointmentDAO) {
 
         super(reportID, generatedBy);
         this.dentistID = dentistID;
         this.startDate = startDate;
+        this.reportDate = reportDate;
         this.appointmentDAO = appointmentDAO;
     }
 

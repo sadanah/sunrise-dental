@@ -12,19 +12,19 @@ import com.sunrisedentalclinic.client.ui.panels.receptionist.RegisterAppointment
 import com.sunrisedentalclinic.client.ui.panels.receptionist.SearchAppointmentPanel;
 import com.sunrisedentalclinic.client.ui.panels.receptionist.GenerateBillPanel;
 import com.sunrisedentalclinic.client.ui.util.IconLoader;
-
+import com.sunrisedentalclinic.client.ui.util.EmojiIcon;
 import javax.swing.*;
 import java.awt.*;
 
 public class ReceptionistDashboardFrame extends JFrame {
 
-    private static final String HOME = "HOME";
-    private static final String REGISTER_APPOINTMENT = "REGISTER_APPOINTMENT";
-    private static final String SEARCH_APPOINTMENT = "SEARCH_APPOINTMENT";
-    private static final String GENERATE_BILL = "GENERATE_BILL";
-    private static final String REGISTER_PATIENT = "REGISTER_PATIENT";
-    private static final String SEARCH_PATIENT = "SEARCH_PATIENT";
-    private static final String HELP = "HELP";
+    public static final String HOME = "HOME";
+    public static final String REGISTER_APPOINTMENT = "REGISTER_APPOINTMENT";
+    public static final String SEARCH_APPOINTMENT = "SEARCH_APPOINTMENT";
+    public static final String GENERATE_BILL = "GENERATE_BILL";
+    public static final String REGISTER_PATIENT = "REGISTER_PATIENT";
+    public static final String SEARCH_PATIENT = "SEARCH_PATIENT";
+    public static final String HELP = "HELP";
 
     private final ApiClient apiClient;
     private final CardLayout cardLayout = new CardLayout();
@@ -39,19 +39,19 @@ public class ReceptionistDashboardFrame extends JFrame {
         setLayout(new BorderLayout());
 
         SidebarPanel sidebar = new SidebarPanel(this::navigate);
-        sidebar.addNavButton("Dashboard", IconLoader.load("home.png"), HOME, this::navigate);
-        sidebar.addSection("Appointments", IconLoader.load("appointment.png"));
+        sidebar.addNavButton("  Dashboard", new EmojiIcon("🏠"), HOME, this::navigate);
+        sidebar.addSection("  Appointments", new EmojiIcon("📅"));
         sidebar.addNavButton("Register", null, REGISTER_APPOINTMENT, this::navigate);
         sidebar.addNavButton("Search", null, SEARCH_APPOINTMENT, this::navigate);
         sidebar.addNavButton("Generate Bill", null, GENERATE_BILL, this::navigate);
-        sidebar.addSection("Patients", IconLoader.load("patient.png"));
+        sidebar.addSection("  Patients", new EmojiIcon("🧑‍🤝‍🧑"));
         sidebar.addNavButton("Register", null, REGISTER_PATIENT, this::navigate);
         sidebar.addNavButton("Search", null, SEARCH_PATIENT, this::navigate);
         sidebar.addGlue();
-        sidebar.addNavButton("Help", null, HELP, this::navigate);
-        sidebar.addNavButton("Logout", IconLoader.load("logout.png"), "LOGOUT", this::navigate);
+        sidebar.addNavButton("  Help", new EmojiIcon("❓"), HELP, this::navigate);
+        sidebar.addNavButton("  Logout", new EmojiIcon("🚪"), "LOGOUT", this::navigate);
 
-        contentPanel.add(new HomePanel(), HOME);
+        contentPanel.add(new HomePanel(apiClient, this::navigate), HOME);
         contentPanel.add(new RegisterAppointmentPanel(apiClient), REGISTER_APPOINTMENT);
         contentPanel.add(new SearchAppointmentPanel(apiClient), SEARCH_APPOINTMENT);
         contentPanel.add(new GenerateBillPanel(apiClient), GENERATE_BILL);

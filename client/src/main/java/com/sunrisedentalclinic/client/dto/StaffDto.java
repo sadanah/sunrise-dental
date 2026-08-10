@@ -1,6 +1,6 @@
 package com.sunrisedentalclinic.client.dto;
 public class StaffDto {
-    private String staffID, name, contactNo, address, username, role, specialization, consultationFee;
+    private String staffID, name, contactNo, address, username, role, specialization, consultationFee, email;
     public String getStaffID(){return staffID;} public void setStaffID(String v){staffID=v;}
     public String getName(){return name;} public void setName(String v){name=v;}
     public String getContactNo(){return contactNo;} public void setContactNo(String v){contactNo=v;}
@@ -9,4 +9,5 @@ public class StaffDto {
     public String getRole(){return role;} public void setRole(String v){role=v;}
     public String getSpecialization(){return specialization;} public void setSpecialization(String v){specialization=v;}
     public String getConsultationFee(){return consultationFee;} public void setConsultationFee(String v){consultationFee=v;}
+    public String getEmail(){return email;} public void setEmail(String v){email=v;}
 }

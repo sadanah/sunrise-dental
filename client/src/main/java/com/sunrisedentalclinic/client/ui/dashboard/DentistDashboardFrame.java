@@ -9,16 +9,17 @@ import com.sunrisedentalclinic.client.ui.panels.dentist.HomePanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.DentistAppointmentsPanel;
 import com.sunrisedentalclinic.client.ui.panels.dentist.DentistPatientsPanel;
 import com.sunrisedentalclinic.client.ui.util.IconLoader;
+import com.sunrisedentalclinic.client.ui.util.EmojiIcon;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DentistDashboardFrame extends JFrame {
 
-    private static final String HOME = "HOME";
-    private static final String APPOINTMENTS = "APPOINTMENTS";
-    private static final String PATIENTS = "PATIENTS";
-    private static final String HELP = "HELP";
+    public static final String HOME = "HOME";
+    public static final String APPOINTMENTS = "APPOINTMENTS";
+    public static final String PATIENTS = "PATIENTS";
+    public static final String HELP = "HELP";
 
     private final ApiClient apiClient;
     private final CardLayout cardLayout = new CardLayout();
@@ -33,16 +34,16 @@ public class DentistDashboardFrame extends JFrame {
         setLayout(new BorderLayout());
 
         SidebarPanel sidebar = new SidebarPanel(this::navigate);
-        sidebar.addNavButton("Dashboard", IconLoader.load("home.png"), HOME, this::navigate);
-        sidebar.addSection("My Appointments", IconLoader.load("appointment.png"));
+        sidebar.addNavButton("  Dashboard", new EmojiIcon("🏠"), HOME, this::navigate);
+        sidebar.addSection(" My Appointments", new EmojiIcon("📅"));
         sidebar.addNavButton("View / Search", null, APPOINTMENTS, this::navigate);
-        sidebar.addSection("My Patients", IconLoader.load("patient.png"));
+        sidebar.addSection("  My Patients", new EmojiIcon("🧑‍🤝‍🧑"));
         sidebar.addNavButton("View", null, PATIENTS, this::navigate);
         sidebar.addGlue();
-        sidebar.addNavButton("Help", null, HELP, this::navigate);
-        sidebar.addNavButton("Logout", IconLoader.load("logout.png"), "LOGOUT", this::navigate);
+        sidebar.addNavButton("  Help", new EmojiIcon("❓"), HELP, this::navigate);
+        sidebar.addNavButton("  Logout", new EmojiIcon("🚪"), "LOGOUT", this::navigate);
 
-        contentPanel.add(new HomePanel(), HOME);
+        contentPanel.add(new HomePanel(apiClient, this::navigate), HOME);
         contentPanel.add(new DentistAppointmentsPanel(apiClient), APPOINTMENTS);
         contentPanel.add(new DentistPatientsPanel(apiClient), PATIENTS);
         contentPanel.add(new HelpPanel(apiClient), HELP);

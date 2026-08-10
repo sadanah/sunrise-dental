@@ -254,12 +254,12 @@ public class AppointmentDAO implements IDAO<Appointment> {
     /**
      * Finds all appointments assigned to a specific dentist on a specific date.
      */
+
     public List<Appointment> findByDentistAndDate(String dentistID, LocalDate date) {
         List<Appointment> appointments = new ArrayList<>();
 
         String sql = "SELECT * FROM appointment " +
-                "WHERE dentistID = ? " +
-                "AND appointmentDate = ? " +
+                "WHERE dentistID = ? AND appointmentDate = ? " +
                 "ORDER BY appointmentTime";
 
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
@@ -275,8 +275,7 @@ public class AppointmentDAO implements IDAO<Appointment> {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(
-                    "Error finding appointments for dentist on date", e);
+            throw new RuntimeException("Error finding appointments for dentist on date", e);
         }
 
         return appointments;

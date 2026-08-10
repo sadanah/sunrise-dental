@@ -25,7 +25,7 @@ public class ReportFactory {
             case "DAILY_APPOINTMENTS":
                 return new DailyAppointmentReport(reportID, generatedBy, startDate, appointmentDAO);
             case "DENTIST_SCHEDULE":
-                return new DentistScheduleReport(reportID, generatedBy, dentistID, startDate, appointmentDAO);
+                return new DentistScheduleReport(reportID, generatedBy, dentistID, startDate, startDate, appointmentDAO);
             default:
                 throw new IllegalArgumentException("Unknown report type: " + type);
         }

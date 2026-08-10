@@ -12,7 +12,7 @@ public class StaffDAO implements IDAO<Staff> {
 
     @Override
     public void save(Staff staff) {
-        String sql = "INSERT INTO staff (name, contactNo, address, staffID, username, passwordHash, role, specialization, consultationFee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO staff (name, contactNo, address, staffID, username, passwordHash, role, specialization, consultationFee, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, staff.getName());
@@ -30,6 +30,7 @@ public class StaffDAO implements IDAO<Staff> {
                 stmt.setNull(8, Types.VARCHAR);
                 stmt.setNull(9, Types.DECIMAL);
             }
+            stmt.setString(10, staff.getEmail());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -86,7 +87,7 @@ public class StaffDAO implements IDAO<Staff> {
 
     @Override
     public void update(Staff staff) {
-        String sql = "UPDATE staff SET name=?, contactNo=?, address=?, username=?, passwordHash=?, specialization=?, consultationFee=? WHERE staffID=?";
+        String sql = "UPDATE staff SET name=?, contactNo=?, address=?, username=?, passwordHash=?, specialization=?, consultationFee=?, email=? WHERE staffID=?";
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, staff.getName());
@@ -102,8 +103,9 @@ public class StaffDAO implements IDAO<Staff> {
                 stmt.setNull(6, Types.VARCHAR);
                 stmt.setNull(7, Types.DECIMAL);
             }
+            stmt.setString(8, staff.getEmail());
+            stmt.setString(9, staff.getStaffID());
 
-            stmt.setString(8, staff.getStaffID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating staff", e);
@@ -132,16 +134,22 @@ public class StaffDAO implements IDAO<Staff> {
         String username = rs.getString("username");
         String passwordHash = rs.getString("passwordHash");
 
+        Staff staff;
         switch (role) {
             case "DENTIST":
-                return new Dentist(personID, name, contactNo, address, staffID, username, passwordHash,
+                staff = new Dentist(personID, name, contactNo, address, staffID, username, passwordHash,
                         rs.getString("specialization"), rs.getBigDecimal("consultationFee"));
+                break;
             case "RECEPTIONIST":
-                return new Receptionist(personID, name, contactNo, address, staffID, username, passwordHash);
+                staff = new Receptionist(personID, name, contactNo, address, staffID, username, passwordHash);
+                break;
             case "ADMIN":
-                return new Admin(personID, name, contactNo, address, staffID, username, passwordHash);
+                staff = new Admin(personID, name, contactNo, address, staffID, username, passwordHash);
+                break;
             default:
                 throw new IllegalStateException("Unknown staff role: " + role);
         }
+        staff.setEmail(rs.getString("email"));
+        return staff;
     }
 }

@@ -145,11 +145,18 @@ public class ManageTreatmentsPanel extends JPanel {
             statusLabel.setText("All fields are required.");
             return;
         }
+
+        double baseCost;
         try {
-            Double.parseDouble(cost);
+            baseCost = Double.parseDouble(cost);
         } catch (NumberFormatException ex) {
             statusLabel.setForeground(Color.RED);
             statusLabel.setText("Base Cost must be a number.");
+            return;
+        }
+        if (baseCost <= 0) {
+            statusLabel.setForeground(Color.RED);
+            statusLabel.setText("Base Cost must be greater than zero.");
             return;
         }
 

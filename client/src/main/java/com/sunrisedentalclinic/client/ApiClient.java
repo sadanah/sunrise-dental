@@ -130,9 +130,8 @@ public class ApiClient {
         return get("/api/patients", PatientDto[].class);
     }
 
-    public ApiResponse<Void> savePatient(String action, String patientID, String name, String contactNo, String address) throws Exception {
-        return post("/api/patients", Map.of("action", action, "patientID", patientID,
-                "name", name, "contactNo", contactNo, "address", address), Void.class);
+    public ApiResponse<Void> savePatient(Map<String, String> fields) throws Exception {
+        return post("/api/patients", fields, Void.class);
     }
 
     // ===== Staff (Admin) =====

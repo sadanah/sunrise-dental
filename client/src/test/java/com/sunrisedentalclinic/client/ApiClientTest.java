@@ -127,4 +127,22 @@ class ApiClientTest {
         assertEquals(200, result.statusCode);
         assertEquals("S001", result.body.getStaffID());
     }
+
+    @Test
+    void savePatient_success_sendsMapAndReturnsOk() throws Exception {
+        stubResponse(200, "{\"status\":\"ok\"}");
+
+        Map<String, String> fields = new java.util.HashMap<>();
+        fields.put("action", "create");
+        fields.put("patientID", "P003");
+        fields.put("name", "Nadeeka Perera");
+        fields.put("contactNo", "0771234567");
+        fields.put("address", "Colombo");
+        fields.put("email", "nadeeka@example.com");
+
+        ApiClient.ApiResponse<Void> result = apiClient.savePatient(fields);
+
+        assertEquals(200, result.statusCode);
+        assertNull(result.errorMessage);
+    }
 }
