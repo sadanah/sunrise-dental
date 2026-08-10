@@ -15,7 +15,7 @@ public class ServiceFactoryApi {
     private static final EmailGateway emailGateway = new EmailGateway();
     private static final SmsGateway smsGateway = new SmsGateway();
     private static final IAuthService authService = new AuthenticationService(staffDAO);
-    private static final INotificationService notificationService = new NotificationService(emailGateway, smsGateway);
+    private static final INotificationService notificationService = new NotificationService(emailGateway, smsGateway, patientDAO);
     private static final IAppointmentService appointmentService = new AppointmentService(appointmentDAO, notificationService);
     private static final IBillingService billingService = new BillingService(appointmentDAO, billDAO, dentistDAO, treatmentTypeDAO);
     private static final ReportFactory reportFactory = new ReportFactory(appointmentDAO, billDAO);

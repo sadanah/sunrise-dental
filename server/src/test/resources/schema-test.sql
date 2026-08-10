@@ -16,7 +16,8 @@ CREATE TABLE patient (
                          contactNo VARCHAR(20),
                          address VARCHAR(255),
                          patientID VARCHAR(20) UNIQUE NOT NULL,
-                         registeredDate DATE
+                         registeredDate DATE,
+                         email VARCHAR(255) NULL
 );
 
 CREATE TABLE staff (
@@ -29,7 +30,8 @@ CREATE TABLE staff (
                        passwordHash VARCHAR(255) NOT NULL,
                        role VARCHAR(20) NOT NULL,
                        specialization VARCHAR(100) NULL,
-                       consultationFee DECIMAL(10,2) NULL
+                       consultationFee DECIMAL(10,2) NULL,
+                       email VARCHAR(255) NULL
 );
 
 CREATE TABLE treatment_type (

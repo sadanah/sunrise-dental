@@ -5,6 +5,7 @@ public abstract class Person {
     protected String name;
     protected String contactNo;
     protected String address;
+    protected String email;
 
     public Person(int personID, String name, String contactNo, String address){
         this.personID = personID;
@@ -24,4 +25,6 @@ public abstract class Person {
     public void setContactNo(String contactNo) { this.contactNo = contactNo; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 }

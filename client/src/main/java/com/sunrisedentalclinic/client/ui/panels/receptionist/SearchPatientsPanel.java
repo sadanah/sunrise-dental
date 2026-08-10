@@ -3,6 +3,8 @@ package com.sunrisedentalclinic.client.ui.panels.receptionist;
 import com.sunrisedentalclinic.client.ApiClient;
 import com.sunrisedentalclinic.client.dto.PatientDto;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -149,7 +151,10 @@ public class SearchPatientsPanel extends JPanel {
             @Override
             protected Void doInBackground() {
                 try {
-                    ApiClient.ApiResponse<Void> resp = apiClient.savePatient("delete", patientID, "", "", "");
+                    Map<String, String> fields = new HashMap<>();
+                    fields.put("action", "delete");
+                    fields.put("patientID", patientID);
+                    ApiClient.ApiResponse<Void> resp = apiClient.savePatient(fields);
                     statusCode = resp.statusCode;
                     errorMessage = resp.errorMessage;
                 } catch (Exception ex) {

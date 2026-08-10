@@ -138,6 +138,7 @@ public class ManageStaffPanel extends JPanel {
         idField.setText(match.getStaffID());
         nameField.setText(match.getName());
         contactField.setText(match.getContactNo());
+        emailField.setText(match.getEmail() != null ? match.getEmail() : "");
         addressField.setText(match.getAddress());
         usernameField.setText(match.getUsername());
         passwordField.setText("");
@@ -303,6 +304,7 @@ public class ManageStaffPanel extends JPanel {
         fields.put("staffID", id);
         fields.put("name", name);
         fields.put("contactNo", contact);
+        fields.put("email", email);
         fields.put("address", address);
         fields.put("username", username);
         fields.put("password", password);

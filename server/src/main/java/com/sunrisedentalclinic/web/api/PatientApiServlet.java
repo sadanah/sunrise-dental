@@ -39,9 +39,11 @@ public class PatientApiServlet extends HttpServlet {
                 Patient p = patientDAO.findById(r.getPatientID());
                 if (p == null) { JsonUtil.writeJson(res, 404, new ApiError("Not found")); return; }
                 p.setName(r.getName()); p.setContactNo(r.getContactNo()); p.setAddress(r.getAddress());
+                p.setEmail(r.getEmail());
                 patientDAO.update(p);
             } else {
                 Patient p = new Patient(0, r.getName(), r.getContactNo(), r.getAddress(), r.getPatientID(), LocalDate.now());
+                p.setEmail(r.getEmail());
                 patientDAO.save(p);
             }
             JsonUtil.writeJson(res, 200, java.util.Map.of("status", "ok"));

@@ -12,7 +12,7 @@ public class PatientDAO implements IDAO<Patient> {
 
     @Override
     public void save(Patient patient) {
-        String sql = "INSERT INTO patient (name, contactNo, address, patientID, registeredDate) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO patient (name, contactNo, address, patientID, registeredDate, email) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, patient.getName());
@@ -20,6 +20,7 @@ public class PatientDAO implements IDAO<Patient> {
             stmt.setString(3, patient.getAddress());
             stmt.setString(4, patient.getPatientID());
             stmt.setDate(5, Date.valueOf(patient.getRegisteredDate()));
+            stmt.setString(6, patient.getEmail());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error saving patient", e);
@@ -60,13 +61,14 @@ public class PatientDAO implements IDAO<Patient> {
 
     @Override
     public void update(Patient patient) {
-        String sql = "UPDATE patient SET name=?, contactNo=?, address=? WHERE patientID=?";
+        String sql = "UPDATE patient SET name=?, contactNo=?, address=?, email=? WHERE patientID=?";
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, patient.getName());
             stmt.setString(2, patient.getContactNo());
             stmt.setString(3, patient.getAddress());
-            stmt.setString(4, patient.getPatientID());
+            stmt.setString(4, patient.getEmail());
+            stmt.setString(5, patient.getPatientID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating patient", e);
@@ -86,7 +88,7 @@ public class PatientDAO implements IDAO<Patient> {
     }
 
     private Patient mapRow(ResultSet rs) throws SQLException {
-        return new Patient(
+        Patient patient = new Patient(
                 rs.getInt("personID"),
                 rs.getString("name"),
                 rs.getString("contactNo"),
@@ -94,5 +96,7 @@ public class PatientDAO implements IDAO<Patient> {
                 rs.getString("patientID"),
                 rs.getDate("registeredDate").toLocalDate()
         );
+        patient.setEmail(rs.getString("email"));
+        return patient;
     }
 }

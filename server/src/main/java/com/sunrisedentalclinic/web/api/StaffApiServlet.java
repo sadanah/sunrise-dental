@@ -45,11 +45,15 @@ public class StaffApiServlet extends HttpServlet {
 
     private Staff build(StaffRequest r) {
         String hash = com.sunrisedentalclinic.util.PasswordUtil.hash(r.getPassword());
+        Staff staff;
         if ("DENTIST".equals(r.getRole()))
-            return new Dentist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash, r.getSpecialization(), new BigDecimal(r.getConsultationFee()));
-        if ("ADMIN".equals(r.getRole()))
-            return new Admin(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
-        return new Receptionist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+            staff = new Dentist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash, r.getSpecialization(), new BigDecimal(r.getConsultationFee()));
+        else if ("ADMIN".equals(r.getRole()))
+            staff = new Admin(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+        else
+            staff = new Receptionist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+        staff.setEmail(r.getEmail());
+        return staff;
     }
 
     // For updates: if password is blank, keep the existing hash instead of hashing "" and locking the user out.
@@ -61,10 +65,14 @@ public class StaffApiServlet extends HttpServlet {
             Staff existing = staffDAO.findById(r.getStaffID());
             hash = existing != null ? existing.getPasswordHash() : "";
         }
+        Staff staff;
         if ("DENTIST".equals(r.getRole()))
-            return new Dentist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash, r.getSpecialization(), new BigDecimal(r.getConsultationFee()));
-        if ("ADMIN".equals(r.getRole()))
-            return new Admin(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
-        return new Receptionist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+            staff = new Dentist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash, r.getSpecialization(), new BigDecimal(r.getConsultationFee()));
+        else if ("ADMIN".equals(r.getRole()))
+            staff = new Admin(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+        else
+            staff = new Receptionist(0, r.getName(), r.getContactNo(), r.getAddress(), r.getStaffID(), r.getUsername(), hash);
+        staff.setEmail(r.getEmail());
+        return staff;
     }
 }

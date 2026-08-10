@@ -34,7 +34,6 @@ public class Appointment {
     }
 
     public String getAppointmentNo() { return appointmentNo; }
-    //setter for appointmentNo
     public void setAppointmentNo(String apt001) {this.appointmentNo = appointmentNo; }
     public LocalDate getAppointmentDate() { return appointmentDate; }
     public LocalTime getAppointmentTime() { return appointmentTime; }

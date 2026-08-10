@@ -11,7 +11,7 @@ public class DentistDAO implements IDAO<Dentist> {
 
     @Override
     public void save(Dentist dentist) {
-        String sql = "INSERT INTO staff (name, contactNo, address, staffID, username, passwordHash, role, specialization, consultationFee) VALUES (?, ?, ?, ?, ?, ?, 'DENTIST', ?, ?)";
+        String sql = "INSERT INTO staff (name, contactNo, address, staffID, username, passwordHash, role, specialization, consultationFee, email) VALUES (?, ?, ?, ?, ?, ?, 'DENTIST', ?, ?, ?)";
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dentist.getName());
@@ -22,6 +22,7 @@ public class DentistDAO implements IDAO<Dentist> {
             stmt.setString(6, dentist.getPasswordHash());
             stmt.setString(7, dentist.getSpecialization());
             stmt.setBigDecimal(8, dentist.getConsultationFee());
+            stmt.setString(9, dentist.getEmail());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error saving dentist", e);
@@ -62,7 +63,7 @@ public class DentistDAO implements IDAO<Dentist> {
 
     @Override
     public void update(Dentist dentist) {
-        String sql = "UPDATE staff SET name=?, contactNo=?, address=?, username=?, passwordHash=?, specialization=?, consultationFee=? WHERE staffID=?";
+        String sql = "UPDATE staff SET name=?, contactNo=?, address=?, username=?, passwordHash=?, specialization=?, consultationFee=?, email=? WHERE staffID=?";
         try (Connection conn = DBConnectionManager.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dentist.getName());
@@ -72,7 +73,8 @@ public class DentistDAO implements IDAO<Dentist> {
             stmt.setString(5, dentist.getPasswordHash());
             stmt.setString(6, dentist.getSpecialization());
             stmt.setBigDecimal(7, dentist.getConsultationFee());
-            stmt.setString(8, dentist.getStaffID());
+            stmt.setString(8, dentist.getEmail());
+            stmt.setString(9, dentist.getStaffID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating dentist", e);
@@ -92,7 +94,7 @@ public class DentistDAO implements IDAO<Dentist> {
     }
 
     private Dentist mapRow(ResultSet rs) throws SQLException {
-        return new Dentist(
+        Dentist dentist = new Dentist(
                 rs.getInt("personID"),
                 rs.getString("name"),
                 rs.getString("contactNo"),
@@ -103,5 +105,7 @@ public class DentistDAO implements IDAO<Dentist> {
                 rs.getString("specialization"),
                 rs.getBigDecimal("consultationFee")
         );
+        dentist.setEmail(rs.getString("email"));
+        return dentist;
     }
 }
