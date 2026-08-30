@@ -29,7 +29,7 @@ public class HomePanel extends JPanel {
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        JLabel welcome = new JLabel("Welcome back, Admin");
+        JLabel welcome = new JLabel("Welcome back, " + com.sunrisedentalclinic.client.AppSession.getName());
         welcome.setFont(new Font("Segoe UI", Font.BOLD, 24));
         welcome.setAlignmentX(Component.LEFT_ALIGNMENT);
         content.add(welcome);
