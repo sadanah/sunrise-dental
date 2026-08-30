@@ -13,8 +13,6 @@ public class DBConnectionManager {
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
-    private Connection connection;
-
     private DBConnectionManager() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -30,20 +28,8 @@ public class DBConnectionManager {
         return instance;
     }
 
+    // Returns a NEW Connection on every call. The manager itself remains a Singleton
     public Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        }
-        return connection;
-    }
-
-    public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }
