@@ -41,6 +41,7 @@ public class AuthenticationService implements IAuthService {
         );
         session.setStaffID(staff.getStaffID());
         session.setRole(staff.getRole());
+        session.setName(staff.getName());
 
         activeSessions.put(session.getSessionID(), session);
         return session;

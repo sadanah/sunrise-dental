@@ -32,7 +32,7 @@ public class HomePanel extends JPanel {
         content.setOpaque(false);
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        JLabel welcome = new JLabel("Welcome, Dr. " + AppSession.getStaffID());
+        JLabel welcome = new JLabel("Welcome, " + AppSession.getName());
         welcome.setFont(new Font("Segoe UI", Font.BOLD, 24));
         welcome.setForeground(UIConstants.CARD_TEXT_PRIMARY);
         welcome.setAlignmentX(Component.LEFT_ALIGNMENT);
