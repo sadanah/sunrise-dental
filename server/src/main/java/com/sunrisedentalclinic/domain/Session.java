@@ -8,6 +8,7 @@ public class Session {
     private LocalDateTime expiryTime;
     private String staffID;
     private String role;
+    private String name;
 
     public Session(String sessionID, LocalDateTime loginTime, LocalDateTime expiryTime) {
         this.sessionID = sessionID;
@@ -26,4 +27,6 @@ public class Session {
     public void setStaffID(String staffID) { this.staffID = staffID; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

@@ -10,4 +10,5 @@ public class AppSession {
     public static String getStaffID() { return currentSession != null ? currentSession.getStaffID() : null; }
     public static void clear() { currentSession = null; }
     public static boolean isLoggedIn() { return currentSession != null; }
+    public static String getName() { return currentSession != null ? currentSession.getName() : null; }
 }
